@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.iiht.training.auction.boundary.BoundaryTest
+-------------------------------------------------------------------------------
+Tests run: 45, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 127.465 s - in com.iiht.training.auction.boundary.BoundaryTest

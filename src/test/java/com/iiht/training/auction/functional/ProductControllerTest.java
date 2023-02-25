@@ -6,6 +6,7 @@ import static com.iiht.training.auction.testutils.TestUtils.testReport;
 import static com.iiht.training.auction.testutils.TestUtils.yakshaAssert;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
@@ -56,6 +57,7 @@ public class ProductControllerTest {
 		ProductDto savedProductDto = MasterData.getProductDto();
 
 		savedProductDto.setProductId(1L);
+		savedProductDto.setLastDateOfBidding(LocalDate.now().plusYears(10));
 
 		when(this.productService.saveProduct(productDto)).thenReturn(savedProductDto);
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/products/register")
@@ -77,6 +79,7 @@ public class ProductControllerTest {
 		ProductDto productDto = MasterData.getProductDto();
 		ProductDto savedProductDto = MasterData.getProductDto();
 		savedProductDto.setProductId(1L);
+		savedProductDto.setLastDateOfBidding(LocalDate.now().plusYears(10));
 
 		when(this.productService.saveProduct(productDto)).then(new Answer<ProductDto>() {
 
@@ -179,6 +182,7 @@ public class ProductControllerTest {
 		ProductDto savedProductDto = MasterData.getProductDto();
 
 		savedProductDto.setProductId(1L);
+		savedProductDto.setLastDateOfBidding(LocalDate.now().plusYears(10));
 
 		when(this.productService.updateProduct(productDto)).thenReturn(savedProductDto);
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/products/update")
@@ -200,6 +204,7 @@ public class ProductControllerTest {
 		ProductDto productDto = MasterData.getProductDto();
 		ProductDto savedProductDto = MasterData.getProductDto();
 		savedProductDto.setProductId(1L);
+		savedProductDto.setLastDateOfBidding(LocalDate.now().plusYears(10));
 
 		when(this.productService.updateProduct(productDto)).then(new Answer<ProductDto>() {
 
