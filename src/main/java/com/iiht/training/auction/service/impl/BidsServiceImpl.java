@@ -1,11 +1,15 @@
 package com.iiht.training.auction.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.iiht.training.auction.dto.BidsDto;
+import com.iiht.training.auction.entity.BidsEntity;
+import com.iiht.training.auction.entity.ProductEntity;
+import com.iiht.training.auction.exceptions.ProductNotFoundException;
 import com.iiht.training.auction.repository.BidsRepository;
 import com.iiht.training.auction.repository.ProductRepository;
 import com.iiht.training.auction.service.BidsService;
@@ -19,19 +23,27 @@ public class BidsServiceImpl implements BidsService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	@Override
 	public BidsDto placeBid(BidsDto bidsDto) {
-		return null;
+		getProductEntity(bidsDto.getProductId());
+		return convertEntityToDto(bidsRepository.save(convertDtoTOEntity(bidsDto)));
 	}
 
-	@Override
 	public List<BidsDto> getAllBidsOnProduct(Long porductId) {
-		return null;
+		getProductEntity(porductId);
+		return getBidsByProduct(porductId).stream().map(entity -> convertEntityToDto(entity)).toList();
 	}
 
-	@Override
 	public List<BidsDto> getAllBidsAfterProductBiddingEndDate(Long porductId) {
-		return null;
+		ProductEntity productEntity = getProductEntity(porductId);
+		return bidsRepository.findByProductIdAndBiddingDate(productEntity.getLastDateOfBidding(), porductId).stream().map(entity -> convertEntityToDto(entity)).toList();
+	}
+	
+	private ProductEntity getProductEntity(Long id) {
+		return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException());
+	}
+	
+	private List<BidsEntity> getBidsByProduct(Long id) {
+		return bidsRepository.findByProductId(id);
 	}
 
 }

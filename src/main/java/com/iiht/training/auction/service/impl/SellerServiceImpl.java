@@ -2,10 +2,14 @@ package com.iiht.training.auction.service.impl;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.iiht.training.auction.dto.SellerDto;
+import com.iiht.training.auction.entity.SellerEntity;
+import com.iiht.training.auction.exceptions.SellerNotFoundException;
 import com.iiht.training.auction.repository.SellerRepository;
 import com.iiht.training.auction.service.SellerService;
 
@@ -15,30 +19,34 @@ public class SellerServiceImpl implements SellerService {
 	@Autowired
 	private SellerRepository sellerRepository;
 
-	@Override
+	@Autowired
+	private EntityManager entityManager;
+	
 	public SellerDto registerSeller(SellerDto sellerDto) {
-		return null;
+		return convertEntityToDto(sellerRepository.save(convertDtoToEntity(sellerDto)));
 	}
 
-	@Override
 	public SellerDto updateSeller(SellerDto sellerDto) {
-		return null;
+		getSellerEntity(sellerDto.getSellerId());
+		return convertEntityToDto(entityManager.merge(convertDtoToEntity(sellerDto)));
 	}
 
-	@Override
 	public Boolean deleteSeller(Long sellerId) {
-		// TODO Auto-generated method stub
-		return null;
+		getSellerEntity(sellerId);
+		sellerRepository.deleteById(sellerId);
+		return true;
 	}
 
-	@Override
 	public SellerDto getSellerById(Long sellerId) {
-		return null;
+		return convertEntityToDto(getSellerEntity(sellerId));
 	}
 
-	@Override
 	public List<SellerDto> getAllSellers() {
-		return null;
+		return sellerRepository.findAll().stream().map(entity -> convertEntityToDto(entity)).toList();
+	}
+
+	private SellerEntity getSellerEntity(Long id) {
+		return sellerRepository.findById(id).orElseThrow(()-> new SellerNotFoundException());
 	}
 
 }

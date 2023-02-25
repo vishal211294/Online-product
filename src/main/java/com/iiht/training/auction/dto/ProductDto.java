@@ -4,28 +4,43 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ProductDto {
 	private Long productId;
 	
+	@NotNull
+	@Size(min = 3,max = 100 ,message = "product name must lie between 3 and 100 characters.")
 	private String name;
 	
 	private Long sellerId;
 	
+	@NotNull
+	@Size(min = 3,max = 100 ,message = "product description must lie between 3 and 100 characters.")
 	private String description;
 	
+	@NotNull
 	private Integer quantity;
 	
+	@NotNull
 	private Double price;
 	
+	@NotNull
 	private Double startingBidAmount;
 	
+	
+	@NotNull
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Future
 	private LocalDate lastDateOfBidding;
 	
+	@NotNull
+	@Size(min = 3,max = 100 ,message = "product category must lie between 3 and 100 characters.")
+	@Pattern(regexp = "^(Mobiles|Electronics|Clothing|Home)$", message = "Invalid Category.")
 	private String category;
 
 	public Long getProductId() {

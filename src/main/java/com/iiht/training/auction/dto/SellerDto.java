@@ -2,15 +2,32 @@ package com.iiht.training.auction.dto;
 
 import java.util.Objects;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public class SellerDto {
+	
 	private Long sellerId;
 	
+	@NotNull(message="Invalid Property.")
+	@Size(min = 3,max = 100 ,message = "Seller name must lie between 3 and 100 characters.")
 	private String sellerName;
-	
+
+	@NotNull(message="Invalid Property.")
+	@Size(min = 3,max = 100 ,message = "Invalid seller email id.")
+	@Pattern(regexp = "^(.+)@(\\S+)$")
 	private String sellerEmail;
 	
+	@NotNull(message="Invalid Property.")
+	@Size(min = 3,max = 100 ,message = "Address must lie between 3 and 100 characters.")
 	private String address;
 	
+	@NotNull(message="Invalid Property.")
+	@Min(value = 1000000000L, message = "Invalid Property.")
+	@Max(value = 9999999999L, message = "Invalid Property.")
 	private Long phoneNumber;
 
 	public Long getSellerId() {

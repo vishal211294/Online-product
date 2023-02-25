@@ -2,11 +2,18 @@ package com.iiht.training.auction.service.impl;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.iiht.training.auction.dto.ProductDto;
+import com.iiht.training.auction.entity.ProductEntity;
+import com.iiht.training.auction.entity.SellerEntity;
+import com.iiht.training.auction.exceptions.ProductNotFoundException;
+import com.iiht.training.auction.exceptions.SellerNotFoundException;
 import com.iiht.training.auction.repository.ProductRepository;
+import com.iiht.training.auction.repository.SellerRepository;
 import com.iiht.training.auction.service.ProductService;
 
 @Service
@@ -14,40 +21,50 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
+	
+	@Autowired
+	private SellerRepository sellerRepository;
+	
+	@Autowired
+	private EntityManager entityManager;
 
-	@Override
 	public ProductDto saveProduct(ProductDto productDto) {
-		return null;
+		getSellerDetail(productDto.getSellerId());
+		return convertEntityToDto(productRepository.save(convertDtoToEntity(productDto)));
 	}
 
-	@Override
 	public ProductDto updateProduct(ProductDto productDto) {
-		return null;
+		getProductDetail(productDto.getProductId());
+		return convertEntityToDto(entityManager.merge(convertDtoToEntity(productDto)));
 	}
 
-	@Override
 	public Boolean deleteProduct(Long productId) {
-		return false;
+		getProductDetail(productId);
+		productRepository.deleteById(productId);
+		return true;
 	}
 
-	@Override
 	public ProductDto getProductById(Long productId) {
-		return null;
+		return convertEntityToDto(getProductDetail(productId));
 	}
 
-	@Override
 	public List<ProductDto> getAllProducts() {
-		return null;
+		return productRepository.findAll().stream().map(entity -> convertEntityToDto(entity)).toList();
 	}
 
-	@Override
 	public List<ProductDto> getProductsBySeller(Long sellerId) {
-		return null;
+		return productRepository.findAllBySellerId(sellerId).stream().map(entity -> convertEntityToDto(entity)).toList();
 	}
 
-	@Override
 	public List<ProductDto> getProductsByCategory(String category) {
-		return null;
+		return productRepository.findAllByCategory(category).stream().map(entity -> convertEntityToDto(entity)).toList();
 	}
-
+	
+	private SellerEntity getSellerDetail(Long id) {
+		return sellerRepository.findById(id).orElseThrow(()-> new SellerNotFoundException());
+	}
+	
+	private ProductEntity getProductDetail(Long id) {
+		return productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException());
+	}
 }

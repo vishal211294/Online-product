@@ -2,10 +2,18 @@ package com.iiht.training.auction.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "bids")
 public class BidsEntity {
 
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Double bidAmount;
 	private LocalDate biddingDate;

@@ -65,9 +65,15 @@ public class TestUtils {
 
 		try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
 			stream.forEach(s -> contentBuilder.append(s).append("\n"));
+			System.out.println("999999999999999999999999999999999999");
+			System.out.println("999999999999999999999999999999999999");
+			System.out.println("999999999999999999999999999999999999");
+			System.out.println("999999999999999999999999999999999999");
+			System.out.println("999999999999999999999999999999999999");
+			System.out.println(contentBuilder);
+
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 		}
 
 		return contentBuilder.toString();

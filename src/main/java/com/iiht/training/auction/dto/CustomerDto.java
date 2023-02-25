@@ -2,18 +2,38 @@ package com.iiht.training.auction.dto;
 
 import java.util.Objects;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Length;
+
 public class CustomerDto {
 
 	private Long id;
-	
+
+	@NotNull(message="Invalid Property.")
+	@Size(min = 3,max = 100 ,message = "username must lie between 3 and 100 characters.")
 	private String username;
 	
+	@NotNull(message="Invalid Property.")
+	@Size(min = 3,max = 100 ,message = "password must lie between 3 and 100 characters.")
 	private String password;
 	
+	@NotNull(message = "Invalid Property.")
+	@Size(min = 3, max = 100, message = "Email must lie between 3 and 100 characters.")
+	@Pattern(regexp = "^(.+)@(\\S+)$")
 	private String email;
 	
+	@NotNull(message = "Invalid Property.")
+	@Min(value = 1000000000L, message = "Invalid Property.")
+	@Max(value = 9999999999L, message = "Invalid Property.")
 	private Long phoneNumber;
 	
+	@NotNull(message = "Invalid Property.")
+	@Size(min = 3, max = 100, message = "Address must lie between 3 and 100 characters.")
 	private String address;
 
 	public Long getId() {

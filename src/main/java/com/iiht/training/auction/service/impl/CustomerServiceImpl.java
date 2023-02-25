@@ -2,43 +2,54 @@ package com.iiht.training.auction.service.impl;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.iiht.training.auction.dto.CustomerDto;
+import com.iiht.training.auction.entity.CustomerEntity;
+import com.iiht.training.auction.exceptions.CustomerNotFoundException;
 import com.iiht.training.auction.repository.CustomerRepository;
 import com.iiht.training.auction.service.CustomerService;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private EntityManager entityManager;
 
-	@Override
+	
 	public CustomerDto registerCustomer(CustomerDto customerDto) {
-		return null;
+		return convertEntityToDTO(customerRepository.save(convertDTOToEntity(customerDto)));
 	}
 
-	@Override
 	public CustomerDto updateCustomer(CustomerDto customerDto) {
-		return null;
+		isCutomerExist(customerDto.getId());
+		CustomerEntity customerEntity = convertDTOToEntity(customerDto);
+		customerEntity = entityManager.merge(customerEntity);
+		return convertEntityToDTO(customerEntity);
 	}
 
-	@Override
 	public Boolean deleteCustomer(Long id) {
-		return false;
+		isCutomerExist(id);
+		customerRepository.deleteById(id);
+		return true;
 	}
 
-	@Override
 	public CustomerDto getCustomerById(Long id) {
-		return null;
+		return convertEntityToDTO(isCutomerExist(id));
 	}
 
-	@Override
 	public List<CustomerDto> getAllCustomers() {
-
-		return null;
+		return customerRepository.findAll().stream().map(entity -> convertEntityToDTO(entity)).toList();
 	}
 
+	private CustomerEntity isCutomerExist(Long customerId) {
+		return customerRepository.findById(customerId).orElseThrow(() -> new CustomerNotFoundException());
+	}
 }
